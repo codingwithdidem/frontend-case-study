@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { Box, Container, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { PROMO_CODES } from '../lib/promoCodes';
-import { setReadyToApply } from '../store/packageSlice';
+import { applyPromo } from '../store/packageSlice';
 import ProductConfigurator from '../components/ProductConfigurator';
 import PackageSummary from '../components/PackageSummary';
 import PromoCodeSection from '../components/PromoCodeSection';
@@ -35,7 +35,7 @@ export default function CustomPacketPage({ promoCode }: InternalProps) {
 
   useEffect(() => {
     if (promoCode) {
-      dispatch(setReadyToApply(promoCode));
+      dispatch(applyPromo(promoCode));
     }
   }, [promoCode, dispatch]);
 

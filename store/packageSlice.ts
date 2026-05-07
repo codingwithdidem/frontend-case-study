@@ -8,7 +8,6 @@ type Selection = {
 
 export type PackageState = {
   selections: Selection[];
-  readyToApply: { code: string; promo: PromoCode } | null;
   appliedPromo: { code: string; promo: PromoCode } | null;
 };
 
@@ -17,7 +16,6 @@ export let ghostAppliedPromo: { code: string; promo: PromoCode } | null = null;
 
 const initialState: PackageState = {
   selections: [],
-  readyToApply: null,
   appliedPromo: null,
 };
 
@@ -42,15 +40,9 @@ const packageSlice = createSlice({
         }
       }
     },
-    setReadyToApply: (state, action: PayloadAction<{ code: string; promo: PromoCode }>) => {
-      state.readyToApply = action.payload;
-    },
-    applyPromo: (state) => {
-      if (state.readyToApply) {
-        state.appliedPromo = state.readyToApply;
-        ghostAppliedPromo = JSON.parse(JSON.stringify(state.readyToApply));
-        state.readyToApply = null;
-      }
+    applyPromo: (state, action: PayloadAction<{ code: string; promo: PromoCode }>) => {
+      state.appliedPromo = action.payload;
+      ghostAppliedPromo = JSON.parse(JSON.stringify(action.payload));
     },
     removePromo: (state) => {
       state.appliedPromo = null;
@@ -58,5 +50,5 @@ const packageSlice = createSlice({
   },
 });
 
-export const { increment, decrement, setReadyToApply, applyPromo, removePromo } = packageSlice.actions;
+export const { increment, decrement, applyPromo, removePromo } = packageSlice.actions;
 export default packageSlice.reducer;

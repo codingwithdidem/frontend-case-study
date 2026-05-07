@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# testing
+/test-results
+/playwright-report
+
+# interviewer-only docs (do NOT share with candidates)
+INTERVIEW_ROADMAP.md
