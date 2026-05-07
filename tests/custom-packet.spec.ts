@@ -67,9 +67,7 @@ test.describe("Promo Code Tests", () => {
     await expect(page.getByTestId("promo-remove")).toBeVisible();
   });
 
-  test("remove promo does not clear price correctly (bug 2)", async ({
-    page,
-  }) => {
+  test("remove promo does not clear price correctly", async ({ page }) => {
     const incBtn = page.getByTestId("increment-st-pad-std");
     await incBtn.click();
 
