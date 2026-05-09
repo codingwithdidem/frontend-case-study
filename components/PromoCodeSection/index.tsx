@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, Button, TextField, Paper } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 import { RootState } from "../../store";
 import { applyPromo, removePromo } from "../../store/packageSlice";
 import { PROMO_CODES } from "../../lib/promoCodes";
@@ -9,10 +10,17 @@ export default function PromoCodeSection() {
   const [manualCode, setManualCode] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const appliedPromo = useSelector(
     (state: RootState) => state.package.appliedPromo,
   );
+
+  const urlCode = router.query.promoCode as string | undefined;
+  const urlPromo =
+    urlCode && PROMO_CODES[urlCode] && !appliedPromo
+      ? { code: urlCode, promo: PROMO_CODES[urlCode] }
+      : null;
 
   const handleRemove = () => {
     dispatch(removePromo());
@@ -53,6 +61,39 @@ export default function PromoCodeSection() {
             </Button>
           </Box>
         </Paper>
+      )}
+
+      {urlPromo && (
+        <Box
+          sx={{
+            border: "1.5px dashed #26C6DA",
+            borderRadius: 2,
+            p: 2,
+            mb: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Box>
+            <Typography variant="caption" color="text.secondary">
+              İndirim Kodu
+            </Typography>
+            <Typography sx={{ fontWeight: 700 }}>{urlPromo.code}</Typography>
+          </Box>
+          <Button
+            variant="outlined"
+            data-testid="promo-apply-suggested"
+            onClick={() =>
+              dispatch(
+                applyPromo({ code: urlPromo.code, promo: urlPromo.promo }),
+              )
+            }
+            sx={{ borderRadius: "50px", textTransform: "none" }}
+          >
+            Uygula
+          </Button>
+        </Box>
       )}
 
       <Box sx={{ display: "flex", gap: 2 }}>
